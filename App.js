@@ -8,81 +8,25 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
+import {StyleSheet} from 'react-native';
 
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
+import {Provider} from 'react-redux';
+import {PersistGate} from 'redux-persist/integration/react';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-import { Provider } from 'react-redux'
-import { PersistGate } from "redux-persist/integration/react";
+import {NavigationContainer} from '@react-navigation/native';
 
+import store from './app-src/utils/store';
+import Router from './app-src/routes/routes';
 
-import store from './src/utils/store'
-import Router from './app-src/routes/routes'
-
-const Stack = createStackNavigator();
 
 const persistantStore = store();
 
-const AppContainer: () => React$Node = () => {
+const AppContainer = (props) => {
   return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
+    <NavigationContainer initialState={props.initialNavigationState}>
+      <Router />
+    </NavigationContainer>
   );
 };
 
@@ -125,12 +69,48 @@ const styles = StyleSheet.create({
   },
 });
 
-const App = () => {
-  return (
-    <NavigationContainer>
-      <Router />
-    </NavigationContainer>
-  );
-}
+const App = (props) => {
+  const [isLoadingComplete, setLoadingComplete] = React.useState(false);
+  // Load any resources or data that we need prior to rendering the app
+  React.useEffect(() => {
+    async function loadResourcesAndDataAsync() {
+      try {
+        // SplashScreen.preventAutoHide();
+        // Load our initial navigation state
+        // setInitialNavigationState(await getInitialState());
+        // Load fonts
+        // await Font.loadAsync({
+        //   ...Ionicons.font,
+        //   'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
+        //   // Roboto: require("native-base/Fonts/Roboto.ttf"),
+        //   // Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+        // });
+      } catch (e) {
+        // We might want to provide this error information to an error reporting service
+        // console.warn(e);
+      } finally {
+        setLoadingComplete(true);
+        // SplashScreen.hide();
+      }
+    }
+
+    loadResourcesAndDataAsync();
+    // Initialize Firebase
+    // if(!firebase.apps.length){
+    //   firebase.initializeApp(firebaseConfig);
+    // }
+  }, []);
+  if (!isLoadingComplete && !props.skipLoadingScreen) {
+    return null;
+  } else {
+    return (
+      <Provider store={persistantStore.store}>
+        <PersistGate loading={null} persistor={persistantStore.persistor}>
+          <AppContainer />
+        </PersistGate>
+      </Provider>
+    );
+  }
+};
 
 export default App;
