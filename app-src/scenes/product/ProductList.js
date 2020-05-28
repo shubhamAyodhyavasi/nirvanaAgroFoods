@@ -58,10 +58,10 @@ class ProductList extends Component {
         this._getProduct()
         
     }
- 
+    
 
  async _getProduct(){
-      const catId=this.props.navigation.state.params.categoryId;
+     const catId=this.props.route.params.categoryId;
       const resProduct=await getProduct(catId)
       if(resProduct){
         this.setState({

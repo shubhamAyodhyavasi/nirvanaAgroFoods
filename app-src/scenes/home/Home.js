@@ -248,7 +248,7 @@ class Home extends Component {
             <Text
               style={styles.catLink}
               onPress={() => {
-                navigation.navigate('CategoryDetails', {from: 'Home'});
+                navigation.navigate('categoryList');
               }}>
               Browse All <FontIcon name="arrow-right" />
             </Text>
@@ -261,10 +261,9 @@ class Home extends Component {
               <View
                 style={styles.singleCategory}
                 onStartShouldSetResponder={() => {
-                  navigation.navigate('Category', {
-                    from: 'Profile',
-                    categoryId: itm.id,
-                    categoryTitle: itm.title,
+                  
+                  navigation.navigate('productList',{
+                    categoryId: itm.id
                   });
                 }}>
                 <Image
@@ -280,7 +279,7 @@ class Home extends Component {
             title="VIEW ALL CATEGORIES"
             color="white"
             onPress={() => {
-              navigation.navigate('CategoryDetails', {from: 'Home'});
+              navigation.navigate('categoryList');
             }}
             backgroundColor={colors.yellow}
           />

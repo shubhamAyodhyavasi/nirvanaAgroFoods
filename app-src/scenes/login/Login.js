@@ -134,7 +134,8 @@ class Login extends Component {
       if (otpNo == otpNoRes) {
         this.setState({hassOtpError: false});
         const getUser = await getLoginUser(mobileNo);
-        this.props.loginTrue(true, getUser);
+        this.props.onLogin(true);
+        this.props.navigation.navigate('App');
       } else {
         this.setState({hassOtpError: true, isLoading: false});
       }
@@ -226,10 +227,10 @@ class Login extends Component {
               <Button
                 onPress={() => {
                   // this._checkLogin();
-                  console.log({
-                    tt: this.props,
-                  });
-                  this.props.onLogin(true);
+                  // console.log({
+                  //   tt: this.props,
+                  // });
+                   this.props.onLogin(true);
                   this.props.navigation.navigate('App');
                 }}
                 title="CONTINUE"

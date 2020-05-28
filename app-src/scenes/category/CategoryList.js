@@ -77,7 +77,9 @@ class CategoryList extends Component {
                 this.state.categories.map((itm, index) =>
 
                   <View key={index} style={styles.singleCategory} onStartShouldSetResponder={() => {
-                    navigation.navigate('Category', { from: 'Profile', categoryId: itm.id ,categoryTitle: itm.title  })
+                    navigation.navigate('productList',{
+                      categoryId: itm.id
+                    });
                   }}>
                     <Image
                       source={{ uri: fileBaseUrl + itm.image }}

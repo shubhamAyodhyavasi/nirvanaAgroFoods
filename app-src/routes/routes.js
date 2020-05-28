@@ -2,11 +2,17 @@ import * as React from 'react';
 // import { TouchableNativeFeedback } from "react-native"
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-
+import {
+  // AsyncStorage,
+  Text,
+  Button,
+ 
+} from 'react-native';
 // import {Login} from '../scenes';
 import Login from '../scenes/login/Login';
 import Home from '../scenes/home/Home';
-
+import CategoryList from '../scenes/category'
+import ProductList from '../scenes/product'
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -14,17 +20,20 @@ const AppDrawer = () => {
   return (
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
+      <Drawer.Screen name="categoryList" component={CategoryList} />
+      
     </Drawer.Navigator>
   );
 };
 
 const Router = () => {
   const [loggedIN, setLoggedIN] = React.useState(false);
-  return (
+   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
+        
       }}>
       {!loggedIN && (
         <Stack.Screen
@@ -33,6 +42,7 @@ const Router = () => {
         />
       )}
       {true && <Stack.Screen name="App" component={AppDrawer} />}
+      <Drawer.Screen name="productList" component={ProductList} />
     </Stack.Navigator>
   );
 };
