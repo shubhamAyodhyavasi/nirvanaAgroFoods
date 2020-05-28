@@ -229,6 +229,7 @@ class Login extends Component {
                   console.log({
                     tt: this.props,
                   });
+                  this.props.onLogin(true);
                   this.props.navigation.navigate('App');
                 }}
                 title="CONTINUE"

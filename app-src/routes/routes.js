@@ -19,14 +19,20 @@ const AppDrawer = () => {
 };
 
 const Router = () => {
+  const [loggedIN, setLoggedIN] = React.useState(false);
   return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
       }}>
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="App" component={AppDrawer} />
+      {!loggedIN && (
+        <Stack.Screen
+          name="Login"
+          component={(props) => <Login {...props} onLogin={setLoggedIN} />}
+        />
+      )}
+      {true && <Stack.Screen name="App" component={AppDrawer} />}
     </Stack.Navigator>
   );
 };
