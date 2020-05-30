@@ -6,14 +6,13 @@ import {
   // AsyncStorage,
   Text,
   Button,
- 
 } from 'react-native';
 // import {Login} from '../scenes';
 import Login from '../scenes/login/Login';
 import Home from '../scenes/home/Home';
-import CategoryList from '../scenes/category'
-import ProductList from '../scenes/product'
-import Cart from '../scenes/cart'
+import CategoryList from '../scenes/category';
+import ProductList from '../scenes/product';
+import Cart from '../scenes/cart';
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -23,19 +22,17 @@ const AppDrawer = () => {
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="categoryList" component={CategoryList} />
       <Drawer.Screen name="Cart" component={Cart} />
-      
     </Drawer.Navigator>
   );
 };
 
 const Router = () => {
   const [loggedIN, setLoggedIN] = React.useState(false);
-   return (
+  return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
-        
       }}>
       {!loggedIN && (
         <Stack.Screen
