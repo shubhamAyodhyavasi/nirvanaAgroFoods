@@ -140,6 +140,9 @@ class SingleProduct extends Component {
     _getUrl(url) {
         return fileBaseUrl + url
     }
+    _htmlToString(str){
+        return str.replace(/<[^>]*>|&nbsp|&middot|;/g, '');
+    }
     render() {
 
         const { selectValue, selectVariation, modalVisible } = this.state
@@ -165,9 +168,8 @@ class SingleProduct extends Component {
                     </View>
                 </View>
                 <View>
-                    {/* <WebView source={{html: productData.detail}} /> */}
-                    {/* <Text style={styles.subDetails}> {productData.detail}</Text> */}
-                </View>
+                    <Text style={styles.subDetails}> {this._htmlToString(productData.detail)}</Text>
+                   </View>
 
                 <View style={styles.detailsSection} >
 

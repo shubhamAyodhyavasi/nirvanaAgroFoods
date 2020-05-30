@@ -159,7 +159,7 @@ class Cart extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation } = this.props
     return (
       <View style={styles.container}>
         <SafeAreaView style={styles.scrollWRapper}>
@@ -176,10 +176,7 @@ class Cart extends Component {
           </View>
           <Button
             onPress={() => {
-              console.log({
-                props: this.props,
-              });
-              // navigation.navigate('Details', { from: 'Profile' })
+              navigation.navigate('Checkout')
             }}
             title="Checkout"
             style={styles.addToCart}

@@ -3,7 +3,6 @@ import { Image, Platform,View, TouchableOpacity, TextInput, Text } from "react-n
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import styles from "./styles";
 import { colors, images } from '../../styles'
-import * as Location from 'expo-location';
 import {getStateList,getCityList} from "./lib/constant"
 import { Colors } from "react-native/Libraries/NewAppScreen";
 class Address extends Component {
@@ -21,32 +20,7 @@ class Address extends Component {
   }
  
 
-  static getDerivedStateFromProps = props => {
-    const { getTotalSteps, getCurrentStep } = props;
-    return {
-      totalSteps: getTotalSteps(),
-      currentStep: getCurrentStep()
-    };
-  };
-  getCurrentLocation(){
-     if (Platform.OS === 'android' ) {
-        this.setState({errorMsg:'Oops, this will not work on Sketch in an Android emulator. Try it on your device!'})
-        alert('Oops, this will not work on Sketch in an Android emulator. Try it on your device!')
-      } else {
-       
-        (async () => {
-          let { status } = await Location.requestPermissionsAsync();
-          if (status !== 'granted') {
-            alert('Permission to access location was denied')
-              this.setState({errorMsg:'Permission to access location was denied'})
-          }
-    
-          let location = await Location.getCurrentPositionAsync({});
-          alert(location)
-          this.setState({location:location})
-        })();
-      }
-  }
+ 
 
   nextStep = () => {
     const { next, saveState } = this.props;
