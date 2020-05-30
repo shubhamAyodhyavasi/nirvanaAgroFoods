@@ -13,6 +13,7 @@ import Login from '../scenes/login/Login';
 import Home from '../scenes/home/Home';
 import CategoryList from '../scenes/category'
 import ProductList from '../scenes/product'
+import Cart from '../scenes/cart'
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 
@@ -21,6 +22,7 @@ const AppDrawer = () => {
     <Drawer.Navigator>
       <Drawer.Screen name="Home" component={Home} />
       <Drawer.Screen name="categoryList" component={CategoryList} />
+      <Drawer.Screen name="Cart" component={Cart} />
       
     </Drawer.Navigator>
   );

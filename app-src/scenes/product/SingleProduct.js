@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { StyleSheet, Text, View, Image, Modal, Picker, Dimensions } from 'react-native'
+//import { WebView } from 'react-native-webview';
 import Button from '../../components/Button'
 import { connect } from 'react-redux'
+import { fileBaseUrl } from '../../modules/constant'
 import { colors, images } from '../../styles'
 import FontIcon from 'react-native-vector-icons/FontAwesome5'
 import { addToCart } from '../../modules/cart'
@@ -136,7 +138,7 @@ class SingleProduct extends Component {
         }.bind(this), 2000);
     }
     _getUrl(url) {
-        return 'https://f91.in/grocery/' + url
+        return fileBaseUrl + url
     }
     render() {
 
@@ -163,7 +165,8 @@ class SingleProduct extends Component {
                     </View>
                 </View>
                 <View>
-                    <Text style={styles.subDetails}> {productData.detail}</Text>
+                    {/* <WebView source={{html: productData.detail}} /> */}
+                    {/* <Text style={styles.subDetails}> {productData.detail}</Text> */}
                 </View>
 
                 <View style={styles.detailsSection} >

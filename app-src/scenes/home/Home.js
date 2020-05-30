@@ -230,7 +230,7 @@ class Home extends Component {
         <View style={{flexDirection: 'row', justifyContent: 'center'}}>
           <Carousel
             layout={'default'}
-            layoutCardOffset={'9'}
+            layoutCardOffset={9}
             ref={(ref) => (this.carousel = ref)}
             data={this.state.banners}
             sliderWidth={screenWidth}
@@ -259,6 +259,7 @@ class Home extends Component {
             categories.length > 0 &&
             categories.slice(0, 6).map((itm, index) => (
               <View
+                key={index}
                 style={styles.singleCategory}
                 onStartShouldSetResponder={() => {
                   
