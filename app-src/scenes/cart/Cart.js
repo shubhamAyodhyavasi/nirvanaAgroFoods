@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { fileBaseUrl } from '../../modules/constant'
+import {connect} from 'react-redux';
+import {Container, Content} from 'native-base';
+import AppHeader from '../../components/header/Header';
+import {fileBaseUrl} from '../../modules/constant';
 import {
   StyleSheet,
   Text,
@@ -11,7 +13,7 @@ import {
   ScrollView,
 } from 'react-native';
 import Button from '../../components/Button';
-import { colors, images } from '../../styles';
+import {colors, images} from '../../styles';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
 const styles = StyleSheet.create({
   container: {
@@ -138,18 +140,21 @@ class Cart extends Component {
     return fileBaseUrl + url;
   }
   _singleProductView(item) {
-    console.log({ item })
+    console.log({item});
     return (
       <View style={styles.cartSingleWrapper}>
         <View style={styles.cartLeftSection}>
           <Image
-            source={{ uri: this._getUrl(item.image) }}
+            source={{uri: this._getUrl(item.image)}}
             style={styles.proImage}
           />
         </View>
         <View style={styles.cartmiddleSection}>
           <Text style={styles.title}>{item.title}</Text>
-          <Text style={styles.qty}> {item.qty} x {item.price} = ₹ {item.price * item.qty} </Text>
+          <Text style={styles.qty}>
+            {' '}
+            {item.qty} x {item.price} = ₹ {item.price * item.qty}{' '}
+          </Text>
         </View>
         <View style={styles.cartRightSection}>
           <FontIcon style={styles.closeBtn} name="times" />
@@ -159,32 +164,40 @@ class Cart extends Component {
   }
 
   render() {
-    const { navigation } = this.props
+    const {navigation} = this.props;
     return (
-      <View style={styles.container}>
-        <SafeAreaView style={styles.scrollWRapper}>
-          <ScrollView style={styles.scrollView}>
-            {this.props.cart.items.map((itm, index) =>
-              this._singleProductView(itm),
-            )}
-          </ScrollView>
-        </SafeAreaView>
-        <View style={styles.cartTotalWrapper}>
-          <View style={styles.cartTotalPriceSection}>
-            <Text>Cart Total :</Text>
-            <Text>₹ 30.00 </Text>
+      <Container>
+        {/* <View style={styles.container}> */}
+        <AppHeader navigation={navigation} title="Cart" />
+        <Content>
+          <SafeAreaView style={styles.scrollWRapper}>
+            <ScrollView style={styles.scrollView}>
+              {this.props.cart.items.map((itm, index) =>
+                this._singleProductView(itm),
+              )}
+            </ScrollView>
+          </SafeAreaView>
+          <View style={styles.cartTotalWrapper}>
+            <View style={styles.cartTotalPriceSection}>
+              <Text>Cart Total :</Text>
+              <Text>₹ 30.00 </Text>
+            </View>
+            <Button
+              onPress={() => {
+                console.log({
+                  props: this.props,
+                });
+                // navigation.navigate('Details', { from: 'Profile' })
+              }}
+              title="Checkout"
+              style={styles.addToCart}
+              color={colors.white}
+              backgroundColor={colors.yellow}
+            />
           </View>
-          <Button
-            onPress={() => {
-              navigation.navigate('Checkout')
-            }}
-            title="Checkout"
-            style={styles.addToCart}
-            color={colors.white}
-            backgroundColor={colors.yellow}
-          />
-        </View>
-      </View>
+        </Content>
+        {/* </View> */}
+      </Container>
     );
   }
 }

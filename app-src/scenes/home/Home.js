@@ -10,6 +10,8 @@ import {
   Modal,
   FlatList,
 } from 'react-native';
+import {Container, Content} from 'native-base';
+import AppHeader from '../../components/header/Header';
 import Button from '../../components/Button';
 import {colors, images} from '../../styles';
 import FontIcon from 'react-native-vector-icons/FontAwesome5';
@@ -225,86 +227,94 @@ class Home extends Component {
     return isLoading ? (
       <Loader />
     ) : (
-      <View style={styles.container}>
-        <View style={{flexDirection: 'row', justifyContent: 'center'}}>
-          <Carousel
-            layout={'default'}
-            layoutCardOffset={9}
-            ref={(ref) => (this.carousel = ref)}
-            data={this.state.banners}
-            sliderWidth={screenWidth}
-            autoplay={true}
-            itemWidth={screenWidth}
-            renderItem={this._renderItem}
-            onSnapToItem={(index) => this.setState({activeIndex: index})}
-          />
-        </View>
-        <View style={styles.headingSection}>
-          <View style={styles.headingLeft}>
-            <Text style={styles.catTitle}> Popular categories</Text>
+      <Container>
+        <AppHeader title="Home" navigation={this.props.navigation} />
+        <Content>
+          {/* <View style={styles.container}> */}
+          <View style={{flexDirection: 'row', justifyContent: 'center'}}>
+            <Carousel
+              layout={'default'}
+              layoutCardOffset={9}
+              ref={(ref) => (this.carousel = ref)}
+              data={this.state.banners}
+              sliderWidth={screenWidth}
+              autoplay={true}
+              itemWidth={screenWidth}
+              renderItem={this._renderItem}
+              onSnapToItem={(index) => this.setState({activeIndex: index})}
+            />
           </View>
-          <View style={styles.headingLink}>
-            <Text
-              style={styles.catLink}
-              onPress={() => {
-                navigation.navigate('categoryList');
-              }}>
-              Browse All <FontIcon name="arrow-right" />
-            </Text>
-          </View>
-        </View>
-        <View style={styles.categoryWrapper}>
-          {categories &&
-            categories.length > 0 &&
-            categories.slice(0, 6).map((itm, index) => (
-              <View
-                key={index}
-                style={styles.singleCategory}
-                onStartShouldSetResponder={() => {
-                  
-                  navigation.navigate('productList',{
-                    categoryId: itm.id
-                  });
+          <View style={styles.headingSection}>
+            <View style={styles.headingLeft}>
+              <Text style={styles.catTitle}> Popular categories</Text>
+            </View>
+            <View style={styles.headingLink}>
+              <Text
+                style={styles.catLink}
+                onPress={() => {
+                  navigation.navigate('categoryList');
                 }}>
-                <Image
-                  source={{uri: this._getUrl(itm.image)}}
-                  style={styles.categoryImage}
-                />
-                <Text style={styles.title}>{itm.title}</Text>
-              </View>
-            ))}
-        </View>
-        <View style={styles.offerButton}>
-          <Button
-            title="VIEW ALL CATEGORIES"
-            color="white"
-            onPress={() => {
-              navigation.navigate('categoryList');
-            }}
-            backgroundColor={colors.yellow}
-          />
-        </View>
-        <Modal animationType="slide" transparent={true} visible={showLocation}>
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <Text style={styles.modalHeading}>Please Select Location</Text>
-              <FlatList
-                style={styles.list}
-                data={location}
-                renderItem={({item}) => (
-                  <View
-                    style={styles.singleMenu}
-                    onStartShouldSetResponder={() => {
-                      this._savedLocationData(item);
-                    }}>
-                    <Text style={styles.locationText}>{item.locTitle}</Text>
-                  </View>
-                )}
-              />
+                Browse All <FontIcon name="arrow-right" />
+              </Text>
             </View>
           </View>
-        </Modal>
-      </View>
+          <View style={styles.categoryWrapper}>
+            {categories &&
+              categories.length > 0 &&
+              categories.slice(0, 6).map((itm, index) => (
+                <View
+                  key={index}
+                  style={styles.singleCategory}
+                  onStartShouldSetResponder={() => {
+                    navigation.navigate('productList', {
+                      categoryId: itm.id,
+                      categoryTitle: itm.title,
+                    });
+                  }}>
+                  <Image
+                    source={{uri: this._getUrl(itm.image)}}
+                    style={styles.categoryImage}
+                  />
+                  <Text style={styles.title}>{itm.title}</Text>
+                </View>
+              ))}
+          </View>
+          <View style={styles.offerButton}>
+            <Button
+              title="VIEW ALL CATEGORIES"
+              color="white"
+              onPress={() => {
+                navigation.navigate('categoryList');
+              }}
+              backgroundColor={colors.yellow}
+            />
+          </View>
+          <Modal
+            animationType="slide"
+            transparent={true}
+            visible={showLocation}>
+            <View style={styles.centeredView}>
+              <View style={styles.modalView}>
+                <Text style={styles.modalHeading}>Please Select Location</Text>
+                <FlatList
+                  style={styles.list}
+                  data={location}
+                  renderItem={({item}) => (
+                    <View
+                      style={styles.singleMenu}
+                      onStartShouldSetResponder={() => {
+                        this._savedLocationData(item);
+                      }}>
+                      <Text style={styles.locationText}>{item.locTitle}</Text>
+                    </View>
+                  )}
+                />
+              </View>
+            </View>
+          </Modal>
+          {/* </View> */}
+        </Content>
+      </Container>
     );
   }
 }

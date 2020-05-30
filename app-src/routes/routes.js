@@ -6,7 +6,6 @@ import {
   // AsyncStorage,
   Text,
   Button,
- 
 } from 'react-native';
 // import {Login} from '../scenes';
 import Login from '../scenes/login/Login';
@@ -31,12 +30,11 @@ const AppDrawer = () => {
 
 const Router = () => {
   const [loggedIN, setLoggedIN] = React.useState(false);
-   return (
+  return (
     <Stack.Navigator
       initialRouteName="Home"
       screenOptions={{
         headerShown: false,
-        
       }}>
       {!loggedIN && (
         <Stack.Screen
