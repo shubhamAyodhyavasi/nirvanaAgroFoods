@@ -1,30 +1,33 @@
 import React, { Component } from "react";
-import { Image, Platform,View, TouchableOpacity, TextInput, Text } from "react-native";
+import { Image, Platform, View, TouchableOpacity, TextInput, Text } from "react-native";
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import styles from "./styles";
 import { colors, images } from '../../styles'
-import {getStateList,getCityList} from "./lib/constant"
+import { getStateList, getCityList } from "./lib/constant"
+import Button from '../../components/Button';
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import GetLocation from 'react-native-get-location'
 class Address extends Component {
   constructor(props) {
     super(props);
     this.state = {
       totalSteps: "",
       currentStep: "",
-      location:'',
-      errorMsg:'',
+      location: '',
+      errorMsg: '',
       selectedItems: {},
-      cityList:[],
-      selectedCity:''
+      cityList: [],
+      selectedCity: ''
     };
+    this.getLocation = this.getLocation.bind(this)
   }
- 
 
- 
+
+
 
   nextStep = () => {
     const { next, saveState } = this.props;
-    
+
     // Save state for use in other steps
     saveState({ name: "samad" });
 
@@ -37,9 +40,21 @@ class Address extends Component {
     // Go to previous step
     back();
   }
-  
+  getLocation() {
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 15000,
+    })
+      .then(location => {
+        console.log(location);
+      })
+      .catch(error => {
+        const { code, message } = error;
+        console.warn(code, message);
+      })
+  }
   render() {
-    const { cityList ,selectedCity} = this.state;
+    const { cityList, selectedCity } = this.state;
     return (
       <View style={[styles.container, styles.step1]}>
         <View >
@@ -52,7 +67,7 @@ class Address extends Component {
             multi={false}
             selectedItems={this.state.selectedItems}
             onItemSelect={(item) => {
-              this.setState({ selectedItems: item ,cityList:getCityList(item.name)});
+              this.setState({ selectedItems: item, cityList: getCityList(item.name) });
             }}
             itemStyle={{
               padding: 5,
@@ -84,13 +99,13 @@ class Address extends Component {
             selectedItems={this.state.selectedItems}
             onItemSelect={(item) => {
               this.setState({ selectedCity: item });
-              
+
             }}
             itemStyle={{
-                padding: 5,
-                marginTop: 1,
-                backgroundColor: '#fff',
-                borderColor: '#bbb',
+              padding: 5,
+              marginTop: 1,
+              backgroundColor: '#fff',
+              borderColor: '#bbb',
             }}
             itemTextStyle={{ color: colors.gray }}
             itemsContainerStyle={{ maxHeight: 140 }}
@@ -102,7 +117,7 @@ class Address extends Component {
               {
                 placeholder: "City",
                 underlineColorAndroid: "transparent",
-                style:  styles.selectStyle
+                style: styles.selectStyle
               }
             }
             listProps={
@@ -111,8 +126,18 @@ class Address extends Component {
               }
             }
           />
-          </View>
-         
+          
+          <Button
+            onPress={() => {
+              this.getLocation()
+            }}
+            title="Checkout"
+            style={styles.addToCart}
+            color={colors.white}
+            backgroundColor={colors.yellow}
+          />
+        </View>
+
         <View style={styles.btnContainer}>
           <TouchableOpacity onPress={this.nextStep} style={styles.btnStyle}>
             <Image
