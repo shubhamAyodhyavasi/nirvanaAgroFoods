@@ -122,3 +122,34 @@ export const getUserAddress = async (id) => {
                return false
         });
 }
+
+export const saveAddress = async (formData) => {
+  const encodeForm = (data) => {
+        return Object.keys(data)
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+            .join('&');
+        }
+      return  axios.post(baseUrl+'/addUserAddressR', encodeForm(formData), {headers: {'Accept': 'application/json'}})
+            .then(function (response) {
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error);
+               return false
+        });
+}
+export const placeOrder = async (formData) => {
+  const encodeForm = (data) => {
+        return Object.keys(data)
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+            .join('&');
+        }
+      return  axios.post(baseUrl+'/saveOrder', encodeForm(formData), {headers: {'Accept': 'application/json'}})
+            .then(function (response) {
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error);
+               return false
+        });
+}

@@ -3,11 +3,13 @@ import { View, Text, StyleSheet } from "react-native";
 import AnimatedMultistep from "./lib";
 import Address from "./Address"
 import Payment from "./Payment"
+import ConfirmOrder from "./ConfirmOrder"
 import { colors } from "../../styles";
 
 const allSteps = [
   { name: "Address", component: Address },
   { name: "Payment Option", component: Payment },
+  {name: "Confrim Order" , component :ConfirmOrder}
 ];
 
 export default class Checkout extends Component {
@@ -17,7 +19,7 @@ export default class Checkout extends Component {
     }
   }
 
-  onNext = () => {
+  onNext = (a) => {
     //console.log("Next");
   };
   onBack = () => {

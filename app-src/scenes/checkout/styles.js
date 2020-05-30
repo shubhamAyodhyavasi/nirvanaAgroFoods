@@ -1,10 +1,11 @@
-import { StyleSheet } from "react-native";
-
+import { StyleSheet ,Dimensions} from "react-native";
+import { colors } from "../../styles";
+const screenWidth = Math.round(Dimensions.get('window').width);
 export default StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
-    marginTop: "6%"
+    justifyContent:"center"
   },
   btnContainer: {
     flexDirection: "row",
@@ -12,7 +13,6 @@ export default StyleSheet.create({
     marginTop: "6%"
   },
   step1: {
-    flex: 1
   },
   step2: {
     flex: 1
@@ -56,14 +56,87 @@ export default StyleSheet.create({
     fontSize: 22
   },
   formView:{
-    marginTop:20
+    marginTop:20,
+    width:screenWidth
+  },
+  formFieldView:{
+    width:screenWidth-30
   },
   selectStyle:{
     width:300,
     padding: 12,
-    borderWidth: 0,
-    borderBottomColor: '#fff',
-    borderBottomWidth: 3,
-    color:'#fff'
+     borderBottomColor: colors.yellow,
+    borderBottomWidth: 2,
+    color:colors.yellow
+},
+iconBtn:{
+  backgroundColor:colors.yellow,
+},
+list:{
+  marginTop:10,
+  paddingBottom:10
+},
+listText:{
+  color:colors.white,
+  paddingBottom:5
+},
+addAddressButton:{
+  width:screenWidth-30,
+  marginTop:20
+},
+centeredView: {
+  flex: 1,
+  justifyContent: 'flex-start',
+  alignItems: 'center',
+  marginTop: 22,
+  backgroundColor: '#ed7d3185',
+},
+modalView: {
+  margin: 20,
+  backgroundColor: 'white',
+  padding: 35,
+  alignItems: 'center',
+  shadowColor: '#000',
+  shadowOffset: {
+    width: 0,
+    height: 2,
+  },
+  shadowOpacity: 0.25,
+  elevation: 5,
+},
+modalHeading: {
+  fontSize: 25,
+  width: screenWidth - 110,
+},
+
+buttonGroup:{
+  marginTop:20
+},
+currentLocationButton:{
+  width: screenWidth - 110,
+},
+currentBackButton:{
+  width: screenWidth - 110,
+  marginTop:10,
+  borderColor: colors.yellow,
+  borderWidth: 2
+},
+errorMessage:{
+  color:colors.pink
+},
+whiteColot:{
+  color:colors.white
+},
+centerButton:{
+  flex:1,
+  justifyContent:"center",
+  alignItems:"center"
+},
+confirmHeading:{
+  textAlign:"center",
+  padding:10,
+  color:colors.white,
+  borderBottomColor:colors.white,
+  borderBottomWidth:2
 }
 });

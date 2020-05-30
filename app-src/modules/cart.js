@@ -14,7 +14,7 @@ const initialState = {
     items: [],
     subtotal: 0,
     discount: 0,
-    total: 0,
+    total: 0
 }
 
 
@@ -24,7 +24,7 @@ const initialState = {
  * @param Array items 
  * @returns number
  */
-const _getTotalPrice = items => items.map(item => parseFloat(item.price) * parseInt(item.qty)).reduce((a,b)=> a+b)
+const _getTotalPrice = items => items.map(item => parseFloat(item.price) * parseInt(item.qnt)).reduce((a,b)=> a+b)
 
 /**
  * _removeFromCart remove from cart helper
@@ -59,7 +59,7 @@ const _addToCart = (item, state) => {
     } = state
     const {
         id,
-        qty
+        qnt
     } = item
     console.log("------")
     oldItem = items.find(item => item.id === id)
@@ -68,7 +68,7 @@ const _addToCart = (item, state) => {
             ...items.filter(item => item.id !== id),
             {   
                 ...oldItem,
-                qty: parseInt(oldItem.qty) + parseInt(qty)
+                qnt: parseInt(oldItem.qnt) + parseInt(qnt)
             }
         ]
         return {

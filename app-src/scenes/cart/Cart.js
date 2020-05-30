@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {Container, Content} from 'native-base';
 import AppHeader from '../../components/header/Header';
 import {fileBaseUrl} from '../../modules/constant';
+import {removeFromCart,clearCart} from "../../modules/cart"
 import {
   StyleSheet,
   Text,
@@ -140,7 +141,6 @@ class Cart extends Component {
     return fileBaseUrl + url;
   }
   _singleProductView(item) {
-    console.log({item});
     return (
       <View style={styles.cartSingleWrapper}>
         <View style={styles.cartLeftSection}>
@@ -153,18 +153,24 @@ class Cart extends Component {
           <Text style={styles.title}>{item.title}</Text>
           <Text style={styles.qty}>
             {' '}
-            {item.qty} x {item.price} = ₹ {item.price * item.qty}{' '}
+            {item.qnt} x {item.price} = ₹ {item.price * item.qnt}{' '}
           </Text>
         </View>
-        <View style={styles.cartRightSection}>
-          <FontIcon style={styles.closeBtn} name="times" />
+        <View style={styles.cartRightSection}
+         onStartShouldSetResponder={() => {
+         this.props.removeFromCart(item)
+         // this.props.clearCart(item)
+          
+        }}
+        >
+          <FontIcon style={styles.closeBtn}  name="times" />
         </View>
       </View>
     );
   }
 
   render() {
-    const {navigation} = this.props;
+    const {navigation,cart} = this.props;
     return (
       <Container>
         {/* <View style={styles.container}> */}
@@ -172,7 +178,7 @@ class Cart extends Component {
         <Content>
           <SafeAreaView style={styles.scrollWRapper}>
             <ScrollView style={styles.scrollView}>
-              {this.props.cart.items.map((itm, index) =>
+              {cart.items && cart.items.map((itm, index) =>
                 this._singleProductView(itm),
               )}
             </ScrollView>
@@ -180,14 +186,11 @@ class Cart extends Component {
           <View style={styles.cartTotalWrapper}>
             <View style={styles.cartTotalPriceSection}>
               <Text>Cart Total :</Text>
-              <Text>₹ 30.00 </Text>
+              <Text>₹ {parseInt(this.props.cart.subtotal).toFixed(2)}</Text>
             </View>
             <Button
               onPress={() => {
-                console.log({
-                  props: this.props,
-                });
-                // navigation.navigate('Details', { from: 'Profile' })
+                navigation.navigate('Checkout')
               }}
               title="Checkout"
               style={styles.addToCart}
@@ -212,6 +215,9 @@ Cart.defaultProps = {
 const mapStateToProps = (state) => ({
   cart: state.cart,
 });
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  removeFromCart:removeFromCart,
+  clearCart:clearCart
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

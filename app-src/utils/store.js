@@ -7,7 +7,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import logger from 'redux-logger';
 import app from '../modules/app.module';
 import cart from '../modules/cart';
-
+import order from '../modules/order';
 const analytics = () => (next) => (action) => {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
@@ -21,7 +21,7 @@ const analytics = () => (next) => (action) => {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['cart'],
+  whitelist: ['cart','order'],
 };
 const middlewares = [
   thunk,
@@ -31,6 +31,7 @@ const middlewares = [
 const allReducers = combineReducers({
   cart,
   app,
+  order
   //   referrer: persistReducer(sessionRedConfig, referrer)
 });
 const enhancer = compose(applyMiddleware(...middlewares));

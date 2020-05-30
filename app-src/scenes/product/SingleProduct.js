@@ -128,7 +128,7 @@ class SingleProduct extends Component {
   _addToCart = () => {
     this.props.addToCart({
       ...this.props.productData,
-      qty: this.state.selectValue,
+      qnt: this.state.selectValue,
     });
     this.setModalVisible(true);
   };
@@ -221,7 +221,7 @@ class SingleProduct extends Component {
               onPress={this._addToCart}
               title={
                 <>
-                  <Text>{selectValue}</Text>
+
                   <FontIcon name="cart-plus" style={styles.addTocartIcon} />
                 </>
               }

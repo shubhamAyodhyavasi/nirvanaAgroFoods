@@ -1,17 +1,19 @@
 import React, { Component } from "react";
-import { Image, View, TouchableOpacity, TextInput } from "react-native";
-import { Container, Item, Input, Button,Icon, CheckBox, Content, List, ListItem, Left, Body, Right, Thumbnail, Text } from 'native-base';
+import {  View } from "react-native";
+import { Container, H1, Content, List, Icon, ListItem, Left, Body, Right, Thumbnail, Text ,Button} from 'native-base';
 import styles from "./styles";
 import { connect } from 'react-redux';
-import { colors, images } from '../../styles'
+import { colors } from '../../styles'
 import { updateOrder } from '../../modules/order'
 import { fileBaseUrl } from '../../modules/constant';
-export class Payment extends Component {
+import {placeOrder} from '../../modules/service/'
+export class ConfirmOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
       totalSteps: "",
-      currentStep: ""
+      currentStep: "",
+      orderDone:false
     };
   }
 
@@ -25,18 +27,46 @@ export class Payment extends Component {
   _getUrl(url) {
     return fileBaseUrl + url;
   }
-  nextStep = () => {
-    const { next, saveState } = this.props;
-    next();
+
+  async _placeOrderFun(){
+    const { next,cart ,order } = this.props
+    const OderObject={
+        userId: 86,
+        items: JSON.stringify(cart.items),
+        subtotal: cart.subtotal,
+        total: cart.total,
+        address: order.orderData.orderAddress,
+        payment_type: "cod",
+        delivery: "50",
+        coupen_type: "flat",
+    }
+   const OrderStatus = await placeOrder(OderObject)
+   if(OrderStatus.action){
+       this.setState({
+        orderDone:true
+       })
+  //  next()
+   }
+    console.log("OrderStatus",{OrderStatus})
+  }
+   nextStep = () => {
+     this._placeOrderFun()
+   
   };
 
   render() {
-    console.log("xxxxx", this.props)
     const { cart ,order } = this.props
+    const {orderDone} = this.state
     return (
 
       <Container style={{ backgroundColor: colors.yellow }}>
+          {
+              orderDone ? <Content>
+              <H1 style={styles.confirmHeading}>Thankyou for your order.</H1>
+              </Content>:
+          
         <Content>
+        <H1 style={styles.confirmHeading}>Confirm Order</H1>
           <List>
             <ListItem >
               <Body>
@@ -90,35 +120,6 @@ export class Payment extends Component {
                 <Text note style={styles.whiteColot}>₹ {parseInt(cart.total).toFixed(2)}</Text>
               </Right>
             </ListItem>
-          
-            <ListItem >
-              <Left>
-                <Text note style={styles.whiteColot}>Have coupon?</Text>
-                <Item fixedLabel>
-                  <Input />
-                </Item>
-              </Left>
-
-              <Right>
-                <Button dark><Text> Apply </Text></Button>
-              </Right>
-            </ListItem>
-            <ListItem >
-              <Left>
-                <CheckBox checked={true} />
-              </Left>
-              <Body>
-                <Text style={styles.whiteColot}>COD</Text>
-              </Body>
-            </ListItem>
-            {/* <ListItem >
-              <Left>
-                <CheckBox checked={false} />
-              </Left>
-              <Body>
-                <Text style={styles.whiteColot}>POD (All UPI payment accepted)</Text>
-              </Body>
-            </ListItem> */}
           </List>
           <View style={[styles.btnContainer]}>
           <Button iconLeft bordered dark
@@ -128,29 +129,17 @@ export class Payment extends Component {
             <Text>Back </Text>
           </Button>
           <Button iconRight bordered dark style={{marginLeft:10}}
-            onPress={this.nextStep} 
+            onPress={this.nextStep}
           >
             
-            <Text>Next</Text>
+            <Text>Place Order</Text>
             <Icon name='arrow-forward' />
           </Button>
-            {/* <TouchableOpacity onPress={this.props.back} style={styles.btnStyle}>
-              <Image
-                source={images.arrow}
-                style={[styles.btnImage, styles.backBtn]}
-                resizeMode="cover"
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.nextStep} style={styles.btnStyle}>
-              <Image
-                source={images.arrow}
-                style={styles.btnImage}
-                resizeMode="cover"
-              />
-            </TouchableOpacity> */}
+          
           </View>
         </Content>
-      </Container>
+      }
+     </Container>
 
     );
   }
@@ -165,5 +154,5 @@ const mapDispatchToProps = {
   updateOrder: updateOrder
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Payment);
+export default connect(mapStateToProps, mapDispatchToProps)(ConfirmOrder);
 

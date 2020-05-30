@@ -5,7 +5,7 @@ import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import app from '../modules/app.module'
 import cart from '../modules/cart'
-
+import order from '../modules/order'
 const analytics = () => next => (action) => {
   window.dataLayer = window.dataLayer || []
   window.dataLayer.push({
@@ -21,6 +21,7 @@ const configureStore = (initialState = {}) => {
   const reducers = combineReducers({
     app,
     cart,
+    order
   })
 
   // Middleware and store enhancers

@@ -252,7 +252,7 @@ class Home extends Component {
               <Text
                 style={styles.catLink}
                 onPress={() => {
-                  navigation.navigate('categoryList');
+                  navigation.navigate('Category');
                 }}>
                 Browse All <FontIcon name="arrow-right" />
               </Text>
@@ -284,7 +284,7 @@ class Home extends Component {
               title="VIEW ALL CATEGORIES"
               color="white"
               onPress={() => {
-                navigation.navigate('categoryList');
+                navigation.navigate('Category');
               }}
               backgroundColor={colors.yellow}
             />

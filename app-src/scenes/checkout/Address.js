@@ -1,12 +1,14 @@
 import React, { Component } from "react";
-import { Image, Platform, View, TouchableOpacity, TextInput, Text } from "react-native";
+import { Image, View, TouchableOpacity, Modal } from "react-native";
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import styles from "./styles";
+import {updateOrder} from '../../modules/order'
+import { connect } from 'react-redux';
 import { colors, images } from '../../styles'
-import {getUserAddress} from '../../modules/service';
+import { getUserAddress,saveAddress } from '../../modules/service';
 import { getStateList, getCityList } from "./lib/constant"
+import { Input, Item, Textarea, ListItem, Text, Left, Body ,Radio} from 'native-base'
 import Button from '../../components/Button';
-import { Colors } from "react-native/Libraries/NewAppScreen";
 import GetLocation from 'react-native-get-location'
 class Address extends Component {
   constructor(props) {
@@ -16,27 +18,47 @@ class Address extends Component {
       currentStep: "",
       location: '',
       errorMsg: '',
-      selectedItems: {},
+      selectedCountry: {},
       cityList: [],
       selectedCity: '',
-      selectedAddress:null,
-      savedAddressList:[]
+      selectedAddress: null,
+      savedAddressList: [],
+      activeIndexNo: null,
+      addAddrssModal: false,
+      zipCode:'',
+      fullAddress:'',
+      formError:false,
+      isLoading:true,
+      addressRequiredMessage:false
+
     };
     this.getLocation = this.getLocation.bind(this)
+    this.saveAddress = this.saveAddress.bind(this)
   }
   async componentDidMount() {
-    alert("xxxxxx")
     this._getSavedLocation();
-   }
+    
+  }
 
 
 
   nextStep = () => {
-    const { next, saveState } = this.props;
-   // Save state for use in other steps
-    saveState({ name: "samad" });
-   // Go to next step
-    next();
+    const { next, updateOrder,order } = this.props;
+    // Save state for use in other steps
+    //saveState({ name: "hello ksrtik "});
+    // Go to next step
+    if(this.state.selectedAddress){
+      updateOrder({
+        ...order.orderData,
+        orderAddress:this.state.selectedAddress.address,
+      })
+      next();
+    }else{
+      this.setState({
+        addressRequiredMessage:true
+      })
+    }
+    
   };
 
   goBack() {
@@ -54,106 +76,89 @@ class Address extends Component {
       })
       .catch(error => {
         const { code, message } = error;
-        console.warn(code, message);
       })
   }
 
-   async _getSavedLocation() {
+  async _getSavedLocation() {
     const getaddressRes = await getUserAddress(86);
-   // console.log("getaddressRes",{getaddressRes})
     if (getaddressRes) {
       this.setState({
-        savedAddressList: getaddressRes.addresses,
+        savedAddressList: getaddressRes.addresses
       });
     }
   }
+
+  async saveAddress(){
+    const {selectedCountry,selectedCity,fullAddress,zipCode} =this.state
+    if(selectedCity && fullAddress && zipCode){
+      this.setState({
+        formError:false
+      })
+      const formData={
+        address:fullAddress +' , '+ selectedCity.name+' , '+selectedCountry.name + ' , ' +zipCode ,
+        userId:86
+      }
+      
+      const res = await saveAddress(formData);
+      if(res){
+        this.setState({
+          savedAddressList: res.addresses,
+          addAddrssModal:false
+        })
+      }
+    }else{
+      this.setState({
+        formError:true
+      })
+    }
+  }
   render() {
-    
-    const { cityList, savedAddressList } = this.state;
-    console.log("xxxxxxxx",{savedAddressList})
-    return (
+    console.log("yyy",this.props)
+    const { cityList,formError,addressRequiredMessage, addAddrssModal,selectedCountry, savedAddressList, activeIndexNo } = this.state;
+     return (
       <View style={[styles.container, styles.step1]}>
         <View >
           <Text
             style={styles.currentStepText}
           > Add Your Delivery Address</Text>
+        {
+          addressRequiredMessage &&  <Text style={{color:"red" ,textAlign:"center"}}> Please select address. </Text>
+        }  
         </View>
         <View style={styles.formView}>
-          <SearchableDropdown
-            multi={false}
-            selectedItems={this.state.selectedItems}
-            onItemSelect={(item) => {
-              this.setState({ selectedItems: item, cityList: getCityList(item.name) });
-            }}
-            itemStyle={{
-              padding: 5,
-              marginTop: 1,
-              backgroundColor: '#fff',
-              borderColor: '#bbb',
-            }}
-            itemTextStyle={{ color: colors.gray }}
-            itemsContainerStyle={{ maxHeight: 140 }}
-            items={getStateList()}
-            defaultIndex={2}
-            chip={true}
-            resetValue={false}
-            textInputProps={
-              {
-                placeholder: "State",
-                underlineColorAndroid: "transparent",
-                style: styles.selectStyle
-              }
-            }
-            listProps={
-              {
-                nestedScrollEnabled: true,
-              }
-            }
-          />
-          <SearchableDropdown
-            multi={false}
-            selectedItems={this.state.selectedItems}
-            onItemSelect={(item) => {
-              this.setState({ selectedCity: item });
-
-            }}
-            itemStyle={{
-              padding: 5,
-              marginTop: 1,
-              backgroundColor: '#fff',
-              borderColor: '#bbb',
-            }}
-            itemTextStyle={{ color: colors.gray }}
-            itemsContainerStyle={{ maxHeight: 140 }}
-            items={cityList}
-            defaultIndex={2}
-            chip={true}
-            resetValue={false}
-            textInputProps={
-              {
-                placeholder: "City",
-                underlineColorAndroid: "transparent",
-                style: styles.selectStyle
-              }
-            }
-            listProps={
-              {
-                nestedScrollEnabled: true,
-              }
-            }
-          />
-          
+          {
+            savedAddressList.map((ads, index) =>
+              <ListItem key={index} icon style={styles.list} onStartShouldSetResponder={() => {
+                this.setState(
+                  { activeIndexNo: index, selectedAddress: ads ,addressRequiredMessage:false}
+                );
+              }}>
+                <Left>
+                   <Radio
+                    color={"#f0ad4e"}
+                    selectedColor={"#5cb85c"}
+                    selected={activeIndexNo == index ? true : false}
+                  />
+                </Left>
+                <Body>
+                  <Text style={styles.listText}>{ads.address}</Text>
+                </Body>
+              </ListItem>
+            )
+          }
+        </View>
+        <View style={styles.addAddressButton}>
           <Button
+            title="Add New Address"
+            color={colors.yellow}
             onPress={() => {
-              this.getLocation()
+              this.setState({
+                addAddrssModal: true
+              })
             }}
-            title="getCurrentLocation"
-            style={styles.addToCart}
-            color={colors.white}
-            backgroundColor={colors.yellow}
+            backgroundColor={colors.white}
           />
         </View>
-
         <View style={styles.btnContainer}>
           <TouchableOpacity onPress={this.nextStep} style={styles.btnStyle}>
             <Image
@@ -163,9 +168,127 @@ class Address extends Component {
             />
           </TouchableOpacity>
         </View>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={addAddrssModal}>
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <Text style={styles.modalHeading}>Please Add Your Location</Text>
+              {
+                formError && <Text style={styles.errorMessage} >All address field are required</Text>
+              } 
+              <Textarea rowSpan={3} style={styles.selectStyle} onChangeText={(e)=>{this.setState({fullAddress:e})}} placeholder="Address" />
+              <SearchableDropdown
+                multi={false}
+                selectedItems={selectedCountry}
+                onItemSelect={(item) => {
+                  this.setState({ selectedCountry: item, cityList: getCityList(item.name) });
+                }}
+                itemStyle={{
+                  padding: 5,
+                  marginTop: 1,
+                  backgroundColor: '#fff',
+                  borderColor: '#bbb',
+                }}
+                itemTextStyle={{ color: colors.gray }}
+                itemsContainerStyle={{ maxHeight: 140 }}
+                items={getStateList()}
+                defaultIndex={2}
+                chip={true}
+                resetValue={false}
+                textInputProps={
+                  {
+                    placeholder: "State",
+                    underlineColorAndroid: "transparent",
+                    style: styles.selectStyle
+                  }
+                }
+                listProps={
+                  {
+                    nestedScrollEnabled: true,
+                  }
+                }
+              />
+              <SearchableDropdown
+                multi={false}
+                selectedItems={this.state.selectedItems}
+                onItemSelect={(item) => {
+                  this.setState({ selectedCity: item });
+                }}
+                itemStyle={{
+                  padding: 5,
+                  marginTop: 1,
+                  backgroundColor: '#fff',
+                  borderColor: '#bbb',
+                }}
+                itemTextStyle={{ color: colors.gray }}
+                itemsContainerStyle={{ maxHeight: 140 }}
+                items={cityList}
+                defaultIndex={2}
+                chip={true}
+                resetValue={false}
+                textInputProps={
+                  {
+                    placeholder: "City",
+                    underlineColorAndroid: "transparent",
+                    style: styles.selectStyle
+                  }
+                }
+                listProps={
+                  {
+                    nestedScrollEnabled: true,
+                  }
+                }
+              />
+              <Item inlineLabel>
+                <Input style={styles.selectStyle} onChangeText={(e)=>{this.setState({zipCode:e})}} placeholder="zip code" />
+              </Item>
+              <View style={styles.buttonGroup}>
+                <Button
+                  onPress={() => {
+                    this.saveAddress()
+                  }}
+                  title="Save Address"
+                  style={styles.currentLocationButton}
+                  color={colors.white}
+                  backgroundColor={colors.yellow}
+                />
+                <Button
+                  onPress={() => {
+                    this.setState({addAddrssModal:false})
+                  }}
+                  title="Back"
+                  style={styles.currentBackButton}
+                  color={colors.yellow}
+                  backgroundColor={colors.white}
+                />
+              </View>
+              
+              {/* <Button
+                onPress={() => {
+                  this.getLocation()
+                }}
+                title="Get Current Location"
+                style={styles.currentLocationButton}
+                color={colors.white}
+                backgroundColor={colors.yellow}
+              /> */}
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
 }
 
-export default Address;
+//export default Address;
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+  order:state.order
+});
+const mapDispatchToProps = {
+  updateOrder:updateOrder
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Address);
