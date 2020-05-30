@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Image, View, TouchableOpacity, TextInput } from "react-native";
+import { Image, View, SafeAreaView, ScrollView } from "react-native";
 import { Container, Item, Input, Button,Icon, CheckBox, Content, List, ListItem, Left, Body, Right, Thumbnail, Text } from 'native-base';
 import styles from "./styles";
 import { connect } from 'react-redux';
@@ -36,7 +36,10 @@ export class Payment extends Component {
     return (
 
       <Container style={{ backgroundColor: colors.yellow }}>
+
         <Content>
+        <SafeAreaView style={styles.scrollWRapper}>
+            <ScrollView style={styles.scrollView}>
           <List>
             <ListItem >
               <Body>
@@ -45,26 +48,29 @@ export class Payment extends Component {
               </Body>
             </ListItem>
           </List>
-          <List>
-            {
-              cart.items && cart.items.map((itm, index) =>
-                <ListItem avatar key={index}>
-                  <Left>
-                    <Thumbnail source={{ uri: this._getUrl(itm.image) }} />
-                  </Left>
-                  <Body>
-                    <Text style={styles.whiteColot}>{itm.title}</Text>
-                    <Text style={styles.whiteColot} note>{itm.qnt} x {itm.price} = ₹ {itm.price * itm.qnt}{' '}</Text>
-                  </Body>
-                  <Right>
-                    <Text style={styles.whiteColot} note>₹ {itm.price * itm.qnt}</Text>
-                  </Right>
-                </ListItem>
-              )
-            }
+         
+              <List>
+                {
+                  cart.items && cart.items.map((itm, index) =>
+                    <ListItem avatar key={index}>
+                      <Left>
+                        <Thumbnail source={{ uri: this._getUrl(itm.image) }} />
+                      </Left>
+                      <Body>
+                        <Text style={styles.whiteColot}>{itm.title}</Text>
+                        <Text style={styles.whiteColot} note>{itm.qnt} x {itm.price} = ₹ {itm.price * itm.qnt}{' '}</Text>
+                      </Body>
+                      <Right>
+                        <Text style={styles.whiteColot} note>₹ {itm.price * itm.qnt}</Text>
+                      </Right>
+                    </ListItem>
+                  )
+                }
 
 
-          </List>
+              </List>
+          </ScrollView>
+          </SafeAreaView>
           <List>
             <ListItem >
               <Left>
@@ -80,6 +86,14 @@ export class Payment extends Component {
               </Left>
               <Right>
                 <Text note style={styles.whiteColot}>₹ {parseInt(cart.discount).toFixed(2)}</Text>
+              </Right>
+            </ListItem>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>Delivery Tax</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ {parseInt(cart.delivaryTax).toFixed(2)}</Text>
               </Right>
             </ListItem>
             <ListItem >

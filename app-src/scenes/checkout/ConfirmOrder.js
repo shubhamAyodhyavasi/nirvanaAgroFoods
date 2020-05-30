@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import {  View } from "react-native";
+import {  View,ScrollView ,SafeAreaView} from "react-native";
 import { Container, H1, Content, List, Icon, ListItem, Left, Body, Right, Thumbnail, Text ,Button} from 'native-base';
 import styles from "./styles";
 import { connect } from 'react-redux';
@@ -67,6 +67,8 @@ export class ConfirmOrder extends Component {
           
         <Content>
         <H1 style={styles.confirmHeading}>Confirm Order</H1>
+        <SafeAreaView style={styles.scrollWRapperBig}>
+            <ScrollView style={styles.scrollViewBig}>
           <List>
             <ListItem >
               <Body>
@@ -95,6 +97,8 @@ export class ConfirmOrder extends Component {
 
 
           </List>
+          </ScrollView>
+          </SafeAreaView>
           <List>
             <ListItem >
               <Left>
@@ -110,6 +114,14 @@ export class ConfirmOrder extends Component {
               </Left>
               <Right>
                 <Text note style={styles.whiteColot}>₹ {parseInt(cart.discount).toFixed(2)}</Text>
+              </Right>
+            </ListItem>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>Delivery Tax</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ {parseInt(cart.delivaryTax).toFixed(2)}</Text>
               </Right>
             </ListItem>
             <ListItem >

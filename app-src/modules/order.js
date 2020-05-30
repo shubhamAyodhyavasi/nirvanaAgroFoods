@@ -22,7 +22,6 @@ const initialState = {
  * @param Object state
  */
 const _setOrderData = (item, state) => {
-   console.log("------")
        return {
             ...state,
             orderData: item

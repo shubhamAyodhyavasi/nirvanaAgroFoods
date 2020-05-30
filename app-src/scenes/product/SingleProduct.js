@@ -126,9 +126,13 @@ class SingleProduct extends Component {
     };
   }
   _addToCart = () => {
+    const{order}=this.props
+   const tax= order.orderData?.orderLocation?.deliveryRAte;
+   console.log(tax)
     this.props.addToCart({
       ...this.props.productData,
       qnt: this.state.selectValue,
+      tax:tax
     });
     this.setModalVisible(true);
   };
@@ -154,7 +158,7 @@ class SingleProduct extends Component {
     let variantList = productData.variations;
     variantList =
       variantList && variantList.length > 0 ? JSON.parse(variantList) : [];
-
+   
     return (
       <View style={styles.wrapper}>
         <View
@@ -251,7 +255,12 @@ SingleProduct.propTypes = {
 SingleProduct.defaultProps = {
   navigation: {},
 };
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+  order:state.order
+});
 
-export default connect(null, {
+export default connect(mapStateToProps, {
   addToCart,
 })(SingleProduct);
+

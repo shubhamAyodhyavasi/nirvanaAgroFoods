@@ -14,9 +14,34 @@ const initialState = {
     items: [],
     subtotal: 0,
     discount: 0,
-    total: 0
+    total: 0,
+    delivaryTax:0
 }
 
+
+
+
+/**
+ * _getSubTotalPrice add to cart helper
+ * @private
+ * @param Array items 
+ * @returns number
+ */
+const _getSubTotalPrice = items => items.map(item => parseFloat(item.price) * parseInt(item.qnt)).reduce((a,b)=> a+b)
+
+/**
+ * _getDelivaryPrice add to cart helper
+ * @private
+ * @param Array items 
+ * @returns number
+ */
+const _getDelivaryPrice = items => {
+    const delivaryCharge= items.find((itm)=>{
+        return itm.tax
+    })
+    return delivaryCharge.tax ? delivaryCharge.tax : 0
+    //return parseFloat(subtotalPrice) + parseFloat(delivaryCharge.tax);
+}
 
 /**
  * _getTotalPrice add to cart helper
@@ -24,7 +49,16 @@ const initialState = {
  * @param Array items 
  * @returns number
  */
-const _getTotalPrice = items => items.map(item => parseFloat(item.price) * parseInt(item.qnt)).reduce((a,b)=> a+b)
+const _getTotalPrice = items => {
+    const delivaryCharge= items.find((itm)=>{
+        return itm.tax
+    })
+    const subtotalPrice = _getSubTotalPrice(items)
+    return parseFloat(subtotalPrice) + parseFloat(delivaryCharge.tax);
+}
+
+
+
 
 /**
  * _removeFromCart remove from cart helper
@@ -43,8 +77,9 @@ const _removeFromCart = (item, state) => {
     return {
         ...state,
         items: newItems,
-        subtotal: _getTotalPrice(newItems),
-        total: _getTotalPrice(newItems)
+        subtotal: _getSubTotalPrice(newItems),
+        total: _getTotalPrice(newItems),
+        delivaryTax:_getDelivaryPrice(newItems)
     }
 }
 /**
@@ -61,7 +96,6 @@ const _addToCart = (item, state) => {
         id,
         qnt
     } = item
-    console.log("------")
     oldItem = items.find(item => item.id === id)
     if(oldItem){
         const newItems = [
@@ -74,8 +108,9 @@ const _addToCart = (item, state) => {
         return {
             ...state,
             items: newItems,
-            subtotal: _getTotalPrice(newItems),
-            total: _getTotalPrice(newItems)
+            subtotal: _getSubTotalPrice(newItems),
+            total: _getTotalPrice(newItems),
+            delivaryTax:_getDelivaryPrice(newItems)
         }
     }else{
         const newItems = [
@@ -85,8 +120,9 @@ const _addToCart = (item, state) => {
         return {
             ...state,
             items: newItems,
-            subtotal: _getTotalPrice(newItems),
-            total: _getTotalPrice(newItems)
+            subtotal: _getSubTotalPrice(newItems),
+            total: _getTotalPrice(newItems),
+            delivaryTax:_getDelivaryPrice(newItems)
         }
     }
 }

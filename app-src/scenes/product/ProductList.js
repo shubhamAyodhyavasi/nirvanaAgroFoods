@@ -2,11 +2,6 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {
   StyleSheet,
-  Text,
-  View,
-  Image,
-  SafeAreaView,
-  ScrollView,
 } from 'react-native';
 import {Container, Content} from 'native-base';
 import AppHeader from '../../components/header/Header';
@@ -87,15 +82,10 @@ class ProductList extends Component {
 					back={true}
         />
         <Content>
-          {/* <View style={styles.container}> */}
-          {/* <SafeAreaView style={styles.container}> */}
-          {/* <ScrollView style={styles.scrollView}> */}
           {product.map((itm, index) => (
             <SingleProduct productData={itm} key={index} />
           ))}
-          {/* </ScrollView> */}
-          {/* </SafeAreaView> */}
-          {/* </View> */}
+         
         </Content>
       </Container>
     );

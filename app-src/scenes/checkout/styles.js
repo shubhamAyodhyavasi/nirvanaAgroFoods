@@ -138,5 +138,17 @@ confirmHeading:{
   color:colors.white,
   borderBottomColor:colors.white,
   borderBottomWidth:2
+},
+scrollWRapper: {
+  height: 250,
+},
+scrollView: {
+  height: 100,
+},
+scrollWRapperBig: {
+  height: 300,
+},
+scrollViewBig: {
+  height: 150,
 }
 });

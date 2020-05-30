@@ -44,9 +44,6 @@ class Address extends Component {
 
   nextStep = () => {
     const { next, updateOrder,order } = this.props;
-    // Save state for use in other steps
-    //saveState({ name: "hello ksrtik "});
-    // Go to next step
     if(this.state.selectedAddress){
       updateOrder({
         ...order.orderData,
@@ -282,7 +279,6 @@ class Address extends Component {
   }
 }
 
-//export default Address;
 const mapStateToProps = (state) => ({
   cart: state.cart,
   order:state.order
