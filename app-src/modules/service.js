@@ -106,4 +106,19 @@ export const  saveUser = async (formData) => {
                return false
         });
 }
-
+export const getUserAddress = async (id) => {
+  let formData = {userId: id};
+  const encodeForm = (data) => {
+        return Object.keys(data)
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+            .join('&');
+        }
+      return  axios.post(baseUrl+'/getUserAddress', encodeForm(formData), {headers: {'Accept': 'application/json'}})
+            .then(function (response) {
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error);
+               return false
+        });
+}

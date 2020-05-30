@@ -3,6 +3,7 @@ import { Image, Platform, View, TouchableOpacity, TextInput, Text } from "react-
 import SearchableDropdown from 'react-native-searchable-dropdown';
 import styles from "./styles";
 import { colors, images } from '../../styles'
+import {getUserAddress} from '../../modules/service';
 import { getStateList, getCityList } from "./lib/constant"
 import Button from '../../components/Button';
 import { Colors } from "react-native/Libraries/NewAppScreen";
@@ -17,21 +18,24 @@ class Address extends Component {
       errorMsg: '',
       selectedItems: {},
       cityList: [],
-      selectedCity: ''
+      selectedCity: '',
+      selectedAddress:null,
+      savedAddressList:[]
     };
     this.getLocation = this.getLocation.bind(this)
   }
-
+  async componentDidMount() {
+    alert("xxxxxx")
+    this._getSavedLocation();
+   }
 
 
 
   nextStep = () => {
     const { next, saveState } = this.props;
-
-    // Save state for use in other steps
+   // Save state for use in other steps
     saveState({ name: "samad" });
-
-    // Go to next step
+   // Go to next step
     next();
   };
 
@@ -53,8 +57,20 @@ class Address extends Component {
         console.warn(code, message);
       })
   }
+
+   async _getSavedLocation() {
+    const getaddressRes = await getUserAddress(86);
+   // console.log("getaddressRes",{getaddressRes})
+    if (getaddressRes) {
+      this.setState({
+        savedAddressList: getaddressRes.addresses,
+      });
+    }
+  }
   render() {
-    const { cityList, selectedCity } = this.state;
+    
+    const { cityList, savedAddressList } = this.state;
+    console.log("xxxxxxxx",{savedAddressList})
     return (
       <View style={[styles.container, styles.step1]}>
         <View >
@@ -131,7 +147,7 @@ class Address extends Component {
             onPress={() => {
               this.getLocation()
             }}
-            title="Checkout"
+            title="getCurrentLocation"
             style={styles.addToCart}
             color={colors.white}
             backgroundColor={colors.yellow}

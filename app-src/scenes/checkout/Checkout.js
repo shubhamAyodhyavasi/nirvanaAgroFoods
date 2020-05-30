@@ -13,7 +13,8 @@ const allSteps = [
 export default class Checkout extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+    }
   }
 
   onNext = () => {
@@ -26,6 +27,7 @@ export default class Checkout extends Component {
   finish = state => {
     alert("TCL: App -> state", state)
   };
+  
 
   render() {
     return (
