@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import {StyleSheet, Text, View, Image} from 'react-native';
 import Button from '../../components/Button';
 import {
@@ -12,6 +13,7 @@ import {colors, images} from '../../styles';
 import Loader from '../../components/Loader';
 import {validationFun} from './utils';
 import TextField from '../../components/InputTypes';
+import {setUerState} from '../../modules/user';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -97,7 +99,7 @@ class Login extends Component {
   }
   async _checkLogin() {
     const {mobileNo} = this.state;
-    if (mobileNo.length != 10) {
+    if (mobileNo.length !== 10) {
       this.setState({hassMobileError: true});
     } else {
       this.setState({hassMobileError: false, isLoading: true});
@@ -134,7 +136,7 @@ class Login extends Component {
       if (otpNo == otpNoRes) {
         this.setState({hassOtpError: false});
         const getUser = await getLoginUser(mobileNo);
-        this.props.onLogin(true);
+        this.props.setUerState(getUser.user[0]);
         this.props.navigation.navigate('App');
       } else {
         this.setState({hassOtpError: true, isLoading: false});
@@ -167,7 +169,7 @@ class Login extends Component {
           type: 'User',
         };
         const res = await saveUser(data);
-        if (res.action == 'success') {
+        if (res.action === 'success') {
           this.setState({
             activeIndex: 1,
           });
@@ -226,12 +228,7 @@ class Login extends Component {
             <View style={styles.button}>
               <Button
                 onPress={() => {
-                  // this._checkLogin();
-                  // console.log({
-                  //   tt: this.props,
-                  // });
-                   this.props.onLogin(true);
-                  this.props.navigation.navigate('App');
+                  this._checkLogin();
                 }}
                 title="CONTINUE"
                 color={colors.white}
@@ -267,7 +264,7 @@ class Login extends Component {
             </View>
           </View>
         )}
-        <View style={styles.bottomCityImage}>
+        <View style={styles.bottomCityImage} pointerEvents={'none'}>
           <Image source={images.back} />
         </View>
       </View>
@@ -313,7 +310,7 @@ class Login extends Component {
           <TextField
             label="Email *"
             placeholder="Enter Your Mobile Number"
-            keyboardType="numeric"
+            keyboardType="email"
             errorMessage={false}
             maxLength={30}
             errorMessage={emailReg.errorMessage}
@@ -348,4 +345,10 @@ Login.defaultProps = {
   navigation: {},
 };
 
-export default Login;
+const _mapStateToProp = (state) => ({
+  user: state.user,
+});
+
+export default connect(_mapStateToProp, {
+  setUerState,
+})(Login);

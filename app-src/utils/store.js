@@ -8,6 +8,8 @@ import logger from 'redux-logger';
 import app from '../modules/app.module';
 import cart from '../modules/cart';
 import order from '../modules/order';
+import user from '../modules/user';
+
 const analytics = () => (next) => (action) => {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({
@@ -21,7 +23,7 @@ const analytics = () => (next) => (action) => {
 const persistConfig = {
   key: 'root',
   storage: AsyncStorage,
-  whitelist: ['cart','order'],
+  whitelist: ['cart', 'order', 'user'],
 };
 const middlewares = [
   thunk,
@@ -31,7 +33,8 @@ const middlewares = [
 const allReducers = combineReducers({
   cart,
   app,
-  order
+  order,
+  user,
   //   referrer: persistReducer(sessionRedConfig, referrer)
 });
 const enhancer = compose(applyMiddleware(...middlewares));
