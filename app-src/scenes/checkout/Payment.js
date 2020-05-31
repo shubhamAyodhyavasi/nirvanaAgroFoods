@@ -31,8 +31,7 @@ export class Payment extends Component {
   };
 
   render() {
-    console.log("xxxxx", this.props)
-    const { cart ,order } = this.props
+   const { cart ,order } = this.props
     return (
 
       <Container style={{ backgroundColor: colors.yellow }}>
@@ -105,7 +104,7 @@ export class Payment extends Component {
               </Right>
             </ListItem>
           
-            <ListItem >
+            {/* <ListItem >
               <Left>
                 <Text note style={styles.whiteColot}>Have coupon?</Text>
                 <Item fixedLabel>
@@ -116,7 +115,7 @@ export class Payment extends Component {
               <Right>
                 <Button dark><Text> Apply </Text></Button>
               </Right>
-            </ListItem>
+            </ListItem> */}
             <ListItem >
               <Left>
                 <CheckBox checked={true} />

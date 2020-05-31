@@ -5,6 +5,7 @@ import styles from "./styles";
 import { connect } from 'react-redux';
 import { colors } from '../../styles'
 import { updateOrder } from '../../modules/order'
+import {clearCart} from '../../modules/cart'
 import { fileBaseUrl } from '../../modules/constant';
 import {placeOrder} from '../../modules/service/'
 export class ConfirmOrder extends Component {
@@ -13,7 +14,8 @@ export class ConfirmOrder extends Component {
     this.state = {
       totalSteps: "",
       currentStep: "",
-      orderDone:false
+      orderDone:false,
+      orderInvoice:null
     };
   }
 
@@ -29,7 +31,7 @@ export class ConfirmOrder extends Component {
   }
 
   async _placeOrderFun(){
-    const { next,cart ,order } = this.props
+    const { clearCart,cart ,order } = this.props
     const OderObject={
         userId: 86,
         items: JSON.stringify(cart.items),
@@ -37,17 +39,17 @@ export class ConfirmOrder extends Component {
         total: cart.total,
         address: order.orderData.orderAddress,
         payment_type: "cod",
-        delivery: "50",
+        delivery: cart.delivaryTax,
         coupen_type: "flat",
     }
    const OrderStatus = await placeOrder(OderObject)
-   if(OrderStatus.action){
+    if(OrderStatus.action){
+       clearCart()
        this.setState({
-        orderDone:true
-       })
-  //  next()
+        orderDone:true,
+        orderInvoice:OrderStatus.order
+      })
    }
-    console.log("OrderStatus",{OrderStatus})
   }
    nextStep = () => {
      this._placeOrderFun()
@@ -56,14 +58,90 @@ export class ConfirmOrder extends Component {
 
   render() {
     const { cart ,order } = this.props
-    const {orderDone} = this.state
+    const {orderDone , orderInvoice} = this.state
     return (
 
       <Container style={{ backgroundColor: colors.yellow }}>
           {
               orderDone ? <Content>
               <H1 style={styles.confirmHeading}>Thankyou for your order.</H1>
-              </Content>:
+              <SafeAreaView style={styles.scrollWRapperBig}>
+            <ScrollView style={styles.scrollViewBig}>
+          <List>
+            <ListItem >
+              <Body>
+                <Text style={styles.whiteColot}>Address</Text>
+                <Text style={styles.whiteColot} note>{orderInvoice?.address}</Text>
+              </Body>
+            </ListItem>
+          </List>
+          <List>
+            {
+              orderInvoice.items&& JSON.parse(orderInvoice.items).map((itm, index) =>
+                <ListItem avatar key={index}>
+                  <Left>
+                    <Thumbnail source={{ uri: this._getUrl(itm.image) }} />
+                  </Left>
+                  <Body>
+                    <Text style={styles.whiteColot}>{itm.title}</Text>
+                    <Text style={styles.whiteColot} note>{itm.qnt} x {itm.price} = ₹ {itm.price * itm.qnt}{' '}</Text>
+                  </Body>
+                  <Right>
+                    <Text style={styles.whiteColot} note>₹ {itm.price * itm.qnt}</Text>
+                  </Right>
+                </ListItem>
+              )
+            }
+
+
+          </List>
+          </ScrollView>
+          </SafeAreaView>
+          <List>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>SubTotal</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ {orderInvoice?.subtotal}</Text>
+              </Right>
+            </ListItem>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>Discount</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ 0.00</Text>
+              </Right>
+            </ListItem>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>Delivery Tax</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ {orderInvoice?.delivery}</Text>
+              </Right>
+            </ListItem>
+            <ListItem >
+              <Left>
+                <Text note style={styles.whiteColot}>Total</Text>
+              </Left>
+              <Right>
+                <Text note style={styles.whiteColot}>₹ {orderInvoice?.total}</Text>
+              </Right>
+            </ListItem>
+          </List>
+          <View style={[styles.btnContainer]}>
+          <Button iconLeft bordered dark
+            onPress={this.props.back}
+          >
+            <Icon name='arrow-back' />
+            <Text>Go To Home Page </Text>
+          </Button>
+         
+          
+          </View>
+        </Content>:
           
         <Content>
         <H1 style={styles.confirmHeading}>Confirm Order</H1>
@@ -163,7 +241,8 @@ const mapStateToProps = (state) => ({
   order: state.order,
 });
 const mapDispatchToProps = {
-  updateOrder: updateOrder
+  updateOrder: updateOrder,
+  clearCart:clearCart
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfirmOrder);
