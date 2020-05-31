@@ -32,6 +32,7 @@ export default class Checkout extends Component {
   
 
   render() {
+   
     return (
       <View style={{ flex: 1, backgroundColor: colors.yellow }}>
        
@@ -42,6 +43,7 @@ export default class Checkout extends Component {
             animate={true}
             onBack={this.onBack}
             onNext={this.onNext}
+            navigation={this.props.navigation}
           />
         </View>
       </View>

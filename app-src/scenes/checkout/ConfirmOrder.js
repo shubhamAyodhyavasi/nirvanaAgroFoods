@@ -57,7 +57,7 @@ export class ConfirmOrder extends Component {
   };
 
   render() {
-    const { cart ,order } = this.props
+    const { cart ,order ,navigation} = this.props
     const {orderDone , orderInvoice} = this.state
     return (
 
@@ -103,7 +103,7 @@ export class ConfirmOrder extends Component {
                 <Text note style={styles.whiteColot}>SubTotal</Text>
               </Left>
               <Right>
-                <Text note style={styles.whiteColot}>₹ {orderInvoice?.subtotal}</Text>
+                <Text note style={styles.whiteColot}>₹ {parseInt(orderInvoice?.subtotal).toFixed(2)}</Text>
               </Right>
             </ListItem>
             <ListItem >
@@ -119,7 +119,7 @@ export class ConfirmOrder extends Component {
                 <Text note style={styles.whiteColot}>Delivery Tax</Text>
               </Left>
               <Right>
-                <Text note style={styles.whiteColot}>₹ {orderInvoice?.delivery}</Text>
+                <Text note style={styles.whiteColot}>₹ {parseInt(orderInvoice?.delivery).toFixed(2)}</Text>
               </Right>
             </ListItem>
             <ListItem >
@@ -127,13 +127,13 @@ export class ConfirmOrder extends Component {
                 <Text note style={styles.whiteColot}>Total</Text>
               </Left>
               <Right>
-                <Text note style={styles.whiteColot}>₹ {orderInvoice?.total}</Text>
+                <Text note style={styles.whiteColot}>₹  {parseInt(orderInvoice?.total).toFixed(2)} </Text>
               </Right>
             </ListItem>
           </List>
           <View style={[styles.btnContainer]}>
           <Button iconLeft bordered dark
-            onPress={this.props.back}
+            onPress={()=>{navigation.navigate('Home')}}
           >
             <Icon name='arrow-back' />
             <Text>Go To Home Page </Text>
@@ -238,7 +238,7 @@ export class ConfirmOrder extends Component {
 
 const mapStateToProps = (state) => ({
   cart: state.cart,
-  order: state.order,
+  order: state.order
 });
 const mapDispatchToProps = {
   updateOrder: updateOrder,

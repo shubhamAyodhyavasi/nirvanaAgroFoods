@@ -153,3 +153,18 @@ export const placeOrder = async (formData) => {
                return false
         });
 }
+export const getDaynamicPostData = async (endPoint,formData) => {
+  const encodeForm = (data) => {
+        return Object.keys(data)
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(data[key]))
+            .join('&');
+        }
+      return  axios.post(baseUrl+'/'+endPoint, encodeForm(formData), {headers: {'Accept': 'application/json'}})
+            .then(function (response) {
+                return response.data
+            })
+            .catch(function (error) {
+                console.log(error);
+               return false
+        });
+}
