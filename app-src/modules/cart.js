@@ -27,7 +27,7 @@ const initialState = {
 const _getSubTotalPrice = (items) =>
   items
     .map((item) => parseFloat(item.price) * parseInt(item.qnt))
-    .reduce((a, b) => a + b);
+    .reduce((a, b) => a + b, 0);
 
 /**
  * _getDelivaryPrice add to cart helper
@@ -39,7 +39,7 @@ const _getDelivaryPrice = (items) => {
   const delivaryCharge = items.find((itm) => {
     return itm.tax;
   });
-  return delivaryCharge.tax ? delivaryCharge.tax : 0;
+  return delivaryCharge?.tax ? delivaryCharge.tax : 0;
   //return parseFloat(subtotalPrice) + parseFloat(delivaryCharge.tax);
 };
 
@@ -54,7 +54,7 @@ const _getTotalPrice = (items) => {
     return itm.tax;
   });
   const subtotalPrice = _getSubTotalPrice(items);
-  return parseFloat(subtotalPrice) + parseFloat(delivaryCharge.tax);
+  return parseFloat(subtotalPrice) + parseFloat(delivaryCharge?.tax || 0);
 };
 
 /**
@@ -84,7 +84,7 @@ const _removeFromCart = (item, state) => {
 const _addToCart = (item, state) => {
   const {items} = state;
   const {id, qnt} = item;
-  oldItem = items.find((item) => item.id === id);
+  const oldItem = items.find((item) => item.id === id);
   if (oldItem) {
     const newItems = [
       ...items.filter((item) => item.id !== id),

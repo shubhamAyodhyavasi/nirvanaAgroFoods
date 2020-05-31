@@ -35,7 +35,7 @@ export default class Search extends Component {
 
         return (
             <Container>
-                <AppHeader title="Search" />
+                <AppHeader navigation={navigation} title="Search" />
                 <Content>
                     <View>
                         <Item regular style={{ width: screenWidth - 20, marginLeft: 10, marginTop: 10 }}>

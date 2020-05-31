@@ -1,9 +1,27 @@
 import React from 'react';
-import { DrawerActions } from '@react-navigation/native';
-import { Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
-import { colors } from '../../styles';
+import {DrawerActions} from '@react-navigation/native';
+import {
+  Header,
+  Title,
+  Button,
+  Left,
+  Right,
+  Body,
+  Icon,
+  Badge,
+  Text,
+} from 'native-base';
+import {colors} from '../../styles';
+import {connect} from 'react-redux';
 
-const AppHeader = ({ navigation, title, back, isLocation ,showLocationFun}) => {
+const AppHeader = ({
+  navigation,
+  title,
+  back,
+  isLocation,
+  showLocationFun,
+  cart,
+}) => {
   return (
     <Header
       androidStatusBarColor={colors.yellowDark}
@@ -27,28 +45,38 @@ const AppHeader = ({ navigation, title, back, isLocation ,showLocationFun}) => {
         <Title>{title ? title : ''}</Title>
       </Body>
       <Right>
-        {
-          isLocation && <Button
+        {isLocation && (
+          <Button
             onPress={() => {
               showLocationFun();
             }}
             transparent>
             <Icon name="navigate" />
           </Button>
-        }
+        )}
         <Button
-         onPress={() => {
-          navigation.navigate('Search');
-        }}
-             transparent>
-            <Icon name="ios-search" />
-          </Button>
+          onPress={() => {
+            navigation.navigate('Search');
+          }}
+          transparent>
+          <Icon name="ios-search" />
+        </Button>
 
         <Button
           onPress={() => {
             navigation.navigate('Cart');
           }}
           transparent>
+          {cart.items?.length > 0 && (
+            <Badge style={{position: 'absolute'}}>
+              <Text
+                style={{
+                  fontSize: 10,
+                }}>
+                {cart.items?.length}
+              </Text>
+            </Badge>
+          )}
           <Icon name="cart" />
         </Button>
       </Right>
@@ -56,4 +84,8 @@ const AppHeader = ({ navigation, title, back, isLocation ,showLocationFun}) => {
   );
 };
 
-export default AppHeader;
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps)(AppHeader);
