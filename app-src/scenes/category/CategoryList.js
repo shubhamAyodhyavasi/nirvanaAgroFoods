@@ -5,10 +5,9 @@ import {
   Text,
   View,
   Image,
-  Dimensions,
-  ScrollView,
-  SafeAreaView,
+  Dimensions
 } from 'react-native';
+import { connect } from 'react-redux';
 import {Container, Content} from 'native-base';
 import AppHeader from '../../components/header/Header';
 import {getCategory} from '../../modules/service';
@@ -60,10 +59,18 @@ class CategoryList extends Component {
     };
   }
   async componentDidMount() {
-    const getCategoryRes = await getCategory();
+    let getCategoryRes = await getCategory();
     if (getCategoryRes) {
+      const {order} = this.props;
+      
+      if(order?.orderData?.orderLocation){
+        console.log("order",order?.orderData?.orderLocation.id)
+         getCategoryRes = getCategoryRes.all_category && getCategoryRes.all_category.filter((itm) => {
+          return itm.locationId == order?.orderData?.orderLocation.id
+        })
+      }
       this.setState({
-        categories: getCategoryRes.all_category,
+        categories: getCategoryRes,
         isLoading: false,
       });
     }
@@ -108,10 +115,17 @@ class CategoryList extends Component {
 
 CategoryList.propTypes = {
   navigation: PropTypes.object,
+  
 };
 
 CategoryList.defaultProps = {
   navigation: {},
 };
 
-export default CategoryList;
+//export default CategoryList;
+const mapStateToProps = (state) => ({
+  order:state.order
+});
+const mapDispatchToProps = {};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryList);

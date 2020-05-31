@@ -128,7 +128,6 @@ class SingleProduct extends Component {
   _addToCart = () => {
     const{order}=this.props
    const tax= order.orderData?.orderLocation?.deliveryRAte;
-   console.log(tax)
     this.props.addToCart({
       ...this.props.productData,
       qnt: this.state.selectValue,

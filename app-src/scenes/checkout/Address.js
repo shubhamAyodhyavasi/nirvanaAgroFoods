@@ -110,7 +110,6 @@ class Address extends Component {
     }
   }
   render() {
-    console.log("yyy",this.props)
     const { cityList,formError,addressRequiredMessage, addAddrssModal,selectedCountry, savedAddressList, activeIndexNo } = this.state;
      return (
       <View style={[styles.container, styles.step1]}>

@@ -1,9 +1,9 @@
 import React from 'react';
-import {DrawerActions} from '@react-navigation/native';
-import {Header, Title, Button, Left, Right, Body, Icon} from 'native-base';
-import {colors} from '../../styles';
+import { DrawerActions } from '@react-navigation/native';
+import { Header, Title, Button, Left, Right, Body, Icon } from 'native-base';
+import { colors } from '../../styles';
 
-const AppHeader = ({navigation, title, back}) => {
+const AppHeader = ({ navigation, title, back, isLocation ,showLocationFun}) => {
   return (
     <Header
       androidStatusBarColor={colors.yellowDark}
@@ -27,6 +27,23 @@ const AppHeader = ({navigation, title, back}) => {
         <Title>{title ? title : ''}</Title>
       </Body>
       <Right>
+        {
+          isLocation && <Button
+            onPress={() => {
+              showLocationFun();
+            }}
+            transparent>
+            <Icon name="navigate" />
+          </Button>
+        }
+        <Button
+         onPress={() => {
+          navigation.navigate('Search');
+        }}
+             transparent>
+            <Icon name="ios-search" />
+          </Button>
+
         <Button
           onPress={() => {
             navigation.navigate('Cart');

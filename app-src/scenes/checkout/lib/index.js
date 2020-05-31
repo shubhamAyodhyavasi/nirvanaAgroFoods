@@ -133,7 +133,7 @@ export class index extends Component {
   };
 
   render() {
-    const { steps = 0, duration = 1000 } = this.props;
+    const { steps = 0, duration = 1000 ,navigation } = this.props;
     const { currentStep, action } = this.state;
     const Step = steps[currentStep].component;
     return (
@@ -151,6 +151,7 @@ export class index extends Component {
           getState={this.getState}
           getCurrentStep={this.getCurrentStep}
           getTotalSteps={this.getTotalSteps}
+          navigation={navigation}
         />
       </Animatable.View>
     );

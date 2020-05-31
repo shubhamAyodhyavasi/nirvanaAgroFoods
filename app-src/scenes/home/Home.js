@@ -209,12 +209,21 @@ class Home extends Component {
     const { navigation } = this.props;
 
     const { showLocation, categories, location, isLoading } = this.state;
-    console.log('xxx', this.props, categories)
+  
     return isLoading ? (
       <Loader />
     ) : (
         <Container>
-          <AppHeader title="Home" navigation={this.props.navigation} />
+          <AppHeader 
+            title="Home" 
+            navigation={this.props.navigation} 
+            isLocation={true} 
+            showLocationFun={()=>{
+              this.setState({
+                showLocation:true
+              })
+            }}
+          />
           <Content>
             {/* <View style={styles.container}> */}
             <View style={{ flexDirection: 'row', justifyContent: 'center' }}>

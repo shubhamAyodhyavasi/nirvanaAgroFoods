@@ -16,6 +16,8 @@ import CategoryList from '../scenes/category';
 import ProductList from '../scenes/product';
 import Cart from '../scenes/cart';
 import Checkout from '../scenes/checkout/Checkout';
+import OrderList from '../scenes/OrderList';
+import Search from '../scenes/search';
 
 import DrawerElement from '../components/drawer/Drawer';
 
@@ -29,6 +31,8 @@ const AppDrawer = () => {
       <Drawer.Screen name="Category" component={CategoryList} />
       <Drawer.Screen name="Cart" component={Cart} />
       <Drawer.Screen name="Checkout" component={Checkout} />
+      <Drawer.Screen name="Order" component={OrderList} />
+      <Drawer.Screen name="Search" component={Search} />
     </Drawer.Navigator>
   );
 };
