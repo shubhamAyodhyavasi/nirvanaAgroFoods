@@ -23,11 +23,14 @@ const Button = ({
   children,
   textStyle,
   style,
+  disabled,
 }) => {
-  const btnStyle = [styles.root, { width, height, backgroundColor }, style]
+  const btnStyle = [styles.root, { width, height, backgroundColor }, style, {
+    opacity: disabled ? 0.7: 1,
+  }]
   const txtStyle = [styles.text, { color }, textStyle]
   return (
-    <TouchableOpacity onPress={onPress} style={btnStyle}>
+    <TouchableOpacity disabled={disabled} onPress={onPress} style={btnStyle}>
       {title && <Text style={txtStyle}>{title}</Text>}
       {children}
     </TouchableOpacity>
@@ -44,6 +47,7 @@ Button.propTypes = {
   children: PropTypes.any,
   textStyle: PropTypes.object,
   style: PropTypes.object,
+  disabled: PropTypes.bool,
 }
 
 Button.defaultProps = {

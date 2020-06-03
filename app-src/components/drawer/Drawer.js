@@ -15,10 +15,6 @@ const Drawer = (props) => {
       <DrawerItem
         label="Logout"
         onPress={() => {
-          console.clear();
-          console.log({
-            props,
-          });
           props.unsetUserState();
         }}
       />

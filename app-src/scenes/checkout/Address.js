@@ -135,6 +135,7 @@ class Address extends Component {
       savedAddressList,
       activeIndexNo,
     } = this.state;
+    const cartEmpty = this.props.cart.items.length < 1;
     return (
       <Container>
         <Content
@@ -145,6 +146,15 @@ class Address extends Component {
             backgroundColor: colors.yellow,
           }}>
           <View style={[styles.container, styles.step1]}>
+            {
+              cartEmpty && <View>
+              <Text style={styles.currentStepText}>
+                Your cart is empty!
+              </Text>
+            </View>
+            }
+            {!cartEmpty && 
+            <>
             <View>
               <Text style={styles.currentStepText}>
                 {' '}
@@ -316,15 +326,8 @@ class Address extends Component {
                 </View>
               </View>
             </Modal>
-            {/* <View style={styles.btnContainer}>
-              <TouchableOpacity onPress={this.nextStep} style={styles.btnStyle}>
-                <Image
-                  source={images.arrow}
-                  style={styles.btnImage}
-                  resizeMode="cover"
-                />
-              </TouchableOpacity>
-            </View> */}
+            </>
+            }
           </View>
         </Content>
         <Footer>

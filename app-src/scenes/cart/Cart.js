@@ -192,6 +192,7 @@ class Cart extends Component {
               onPress={() => {
                 navigation.navigate('Checkout')
               }}
+              disabled={true }//!this.props.cart.items.length}
               title="Checkout"
               style={styles.addToCart}
               color={colors.white}

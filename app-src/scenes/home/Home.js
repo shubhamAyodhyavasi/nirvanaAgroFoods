@@ -244,6 +244,9 @@ class Home extends Component {
               sliderWidth={screenWidth}
               autoplay={true}
               itemWidth={screenWidth}
+              loop={true}
+              // enableSnap={true}
+              // loopClonesPerSide={50}
               renderItem={this._renderItem}
               onSnapToItem={(index) => this.setState({activeIndex: index})}
             />
