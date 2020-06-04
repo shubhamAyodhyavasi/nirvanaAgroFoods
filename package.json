@@ -9,7 +9,8 @@
     "test": "jest",
     "lint": "eslint .",
     "android:clean": "cd android && gradlew clean",
-    "apk": "cd android && gradlew assembleRelease"
+    "apk": "cd android && gradlew assembleRelease",
+    "apk-linux": "cd android && ./gradlew assembleRelease"
   },
   "rnpm": {
     "assets": [
