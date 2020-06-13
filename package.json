@@ -10,6 +10,7 @@
     "lint": "eslint .",
     "android:clean": "cd android && gradlew clean",
     "apk": "cd android && gradlew assembleRelease",
+    "apk:bundle": "cd android && gradlew bundleRelease",
     "apk-linux": "cd android && ./gradlew assembleRelease"
   },
   "rnpm": {
