@@ -86,7 +86,7 @@ class Address extends Component {
   }
 
   async _getSavedLocation() {
-    const getaddressRes = await getUserAddress(86);
+    const getaddressRes = await getUserAddress(this.props.user.id);
     if (getaddressRes) {
       this.setState({
         savedAddressList: getaddressRes.addresses,
@@ -360,6 +360,7 @@ class Address extends Component {
 const mapStateToProps = (state) => ({
   cart: state.cart,
   order: state.order,
+  user: state.user,
 });
 const mapDispatchToProps = {
   updateOrder: updateOrder,
